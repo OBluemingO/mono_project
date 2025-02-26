@@ -1,0 +1,20 @@
+# Use Node.js base image
+FROM node:18
+
+# Set working directory inside container
+WORKDIR /app/backend
+
+# Copy package.json and package-lock.json and install dependencies
+
+COPY package.json package-lock.json ./
+RUN npm install
+
+# Copy the rest of the app files
+COPY . .
+
+# Expose the port your Express app runs on
+EXPOSE 8080
+
+# Command to start the app
+CMD ["npm", "run", "dev"]
+
