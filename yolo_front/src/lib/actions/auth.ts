@@ -1,7 +1,6 @@
 "use server"
 
 import { loginSchema, type LoginFormValues } from "@/lib/validations/auth"
-import { cookies } from "next/headers"
 
 export async function login(formData: LoginFormValues) {
   // Validate form fields on the server
@@ -33,21 +32,21 @@ export async function login(formData: LoginFormValues) {
       throw new Error('Network response was not ok');
     }
     if (response.status == 200) {
-      const data = await response.json() as any
-      const c = await cookies()
-      c.set("token", data.data.token, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        maxAge: 60 * 60 * 24 * 7, // 1 week
-        path: "/",
-      })
+      // const data = await response.json() as any
+      // const c = await cookies()
+      // c.set("token", data.data.token, {
+      //   httpOnly: true,
+      //   secure: process.env.NODE_ENV === "production",
+      //   maxAge: 60 * 60 * 24 * 7, // 1 week
+      //   path: "/",
+      // })
 
-      c.set("token_refresh", data.data.refreshToken, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        maxAge: 60 * 60 * 24 * 7, // 1 week
-        path: "/",
-      })
+      // c.set("token_refresh", data.data.refreshToken, {
+      //   httpOnly: true,
+      //   secure: process.env.NODE_ENV === "production",
+      //   maxAge: 60 * 60 * 24 * 7, // 1 week
+      //   path: "/",
+      // })
       return {
         message: 'success'
       }
@@ -62,6 +61,37 @@ export async function login(formData: LoginFormValues) {
     return {
       error: "An error occurred during login. Please try again.",
     }
+  }
+}
+
+export async function resetPassword(token: string, password: string) {
+  try {
+    // Here you would verify the token and update the password in your database
+    // This is a placeholder implementation
+
+    // 1. Verify the JWT token
+    // const payload = await verifyToken(token);
+
+    // 2. Update the user's password
+    // await updateUserPassword(payload.userId, password);
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/reset-password`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        token,
+        new_password: password
+      })
+    })
+    if (!response.ok) {
+      const error = await response.json()
+      throw error.error
+    }
+    return { success: true }
+  } catch (error) {
+    console.error("Error resetting password:", error)
+    return { success: false, error: "Failed to reset password. The token may be invalid or expired." }
   }
 }
 

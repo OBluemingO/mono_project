@@ -19,8 +19,6 @@ export default function LoginForm() {
   const [showPassword, setShowPassword] = useState(false)
   const [serverError, setServerError] = useState<string | null>(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
-  // const store = useAppStore((state) => state)
-  // console.log(store)
 
   const form = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
@@ -35,19 +33,6 @@ export default function LoginForm() {
     setServerError(null)
 
     try {
-      // const result = await login(data)
-
-      // if (result.message) {
-      //   router.push("/dashboard")
-      // }
-
-      // if (result?.error) {
-      //   console.log('first')
-      //   setServerError(result.error)
-      //   form.setError("root", {
-      //     message: result.error,
-      //   })
-      // }
       const result = await signIn("credentials", {
         email: data.email,
         password: data.password,

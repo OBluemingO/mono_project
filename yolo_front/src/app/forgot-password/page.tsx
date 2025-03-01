@@ -1,11 +1,11 @@
-import ResetForm from "@/components/reset-form"
+import ForgotPassword from "@/components/forgot-password-form";
 
 export default function Page() {
   return (
-    <div className="flex min-h-svh w-full items-center justify-center p-6 md:p-10">
+    <main className="flex min-h-screen flex-col items-center justify-center p-4 bg-gray-50">
       <div className="w-full max-w-sm">
-        <ResetForm />
+        <ForgotPassword />
       </div>
-    </div>
+    </main>
   )
 }

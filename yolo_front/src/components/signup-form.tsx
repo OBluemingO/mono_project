@@ -27,6 +27,7 @@ const formSchema = z.object({
 export default function SignupForm() {
   const router = useRouter()
   const [isLoading, setIsLoading] = useState(false)
+  const [serverError, setServerError] = useState<string | null>(null)
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -46,7 +47,6 @@ export default function SignupForm() {
 
       // // Simulate API call
       // await new Promise((resolve) => setTimeout(resolve, 1000))
-      console.log(values)
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/register`, {
         method: "POST",
         headers: {
@@ -59,22 +59,23 @@ export default function SignupForm() {
         }),
       })
 
-      console.log(response)
       if (response.ok) {
         router.push("/dashboard")
         return
       }
 
-      throw "Signup failed"
+      const error = await response.json()
+      console.log(error)
+      throw error.error
     } catch (error) {
-      console.error("Signup failed:", error)
-    } finally {
-      setIsLoading(false)
+      console.log(error)
+      setServerError(error as any)
     }
+    setIsLoading(false)
   }
 
   return (
-    <div className="flex justify-center items-center min-h-screen p-4">
+    <div className="flex justify-center items-center p-4">
       <Card className="w-full max-w-md">
         <CardHeader className="space-y-1">
           <CardTitle className="text-2xl font-bold">Create an account</CardTitle>
@@ -123,6 +124,8 @@ export default function SignupForm() {
                   </FormItem>
                 )}
               />
+
+              {serverError && <div className="text-sm font-medium text-destructive">{serverError}</div>}
               <Button type="submit" className="w-full" disabled={isLoading}>
                 {isLoading ? "Creating account..." : "Sign up"}
               </Button>
@@ -132,8 +135,8 @@ export default function SignupForm() {
         <CardFooter className="flex justify-center">
           <p className="text-sm text-muted-foreground">
             Already have an account?{" "}
-            <Link href="/" className="text-primary hover:underline">
-              Sign in
+            <Link href="/login" className="text-primary hover:underline">
+              Login
             </Link>
           </p>
         </CardFooter>
