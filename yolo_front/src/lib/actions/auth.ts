@@ -1,0 +1,67 @@
+"use server"
+
+import { loginSchema, type LoginFormValues } from "@/lib/validations/auth"
+import { cookies } from "next/headers"
+
+export async function login(formData: LoginFormValues) {
+  // Validate form fields on the server
+  const validatedFields = loginSchema.safeParse(formData)
+
+  // If form validation fails, return errors
+  if (!validatedFields.success) {
+    return {
+      error: "Invalid form data. Please check your inputs.",
+    }
+  }
+
+  const { email, password } = validatedFields.data
+
+  try {
+    // This is where you would typically:
+    // 1. Call your authentication API or service
+    // 2. Verify credentials
+    // 3. Create a session
+
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/login`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ email, password })
+    })
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+    if (response.status == 200) {
+      const data = await response.json() as any
+      const c = await cookies()
+      c.set("token", data.data.token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        maxAge: 60 * 60 * 24 * 7, // 1 week
+        path: "/",
+      })
+
+      c.set("token_refresh", data.data.refreshToken, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        maxAge: 60 * 60 * 24 * 7, // 1 week
+        path: "/",
+      })
+      return {
+        message: 'success'
+      }
+    }
+    // If credentials are invalid
+    return {
+      error: "Invalid email or password. Please try again.",
+    }
+  } catch (error) {
+    // Handle any errors that occur during authentication
+    // console.log(error)
+    return {
+      error: "An error occurred during login. Please try again.",
+    }
+  }
+}
+
