@@ -47,8 +47,13 @@ export default function LoginForm() {
 
       // Handle successful login (redirect happens in the server action)
     } catch (error) {
-      console.log(error)
-      setServerError("An unexpected error occurred. Please try again.")
+      if (error instanceof Error) {
+        setServerError(error.message);
+      } else if (typeof error === "string") {
+        setServerError(error);
+      } else {
+        setServerError("An unexpected error occurred. Please try again.");
+      }
     } finally {
       setIsSubmitting(false)
     }
@@ -129,7 +134,7 @@ export default function LoginForm() {
               )}
             </Button>
             <div className="text-center text-sm">
-              Don't have an account?{" "}
+              Don&apos;t have an account?{" "}
               <Link href="/signup" className="font-medium text-primary hover:underline">
                 Sign up
               </Link>

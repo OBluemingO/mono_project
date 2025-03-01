@@ -32,21 +32,6 @@ export async function login(formData: LoginFormValues) {
       throw new Error('Network response was not ok');
     }
     if (response.status == 200) {
-      // const data = await response.json() as any
-      // const c = await cookies()
-      // c.set("token", data.data.token, {
-      //   httpOnly: true,
-      //   secure: process.env.NODE_ENV === "production",
-      //   maxAge: 60 * 60 * 24 * 7, // 1 week
-      //   path: "/",
-      // })
-
-      // c.set("token_refresh", data.data.refreshToken, {
-      //   httpOnly: true,
-      //   secure: process.env.NODE_ENV === "production",
-      //   maxAge: 60 * 60 * 24 * 7, // 1 week
-      //   path: "/",
-      // })
       return {
         message: 'success'
       }
@@ -56,10 +41,14 @@ export async function login(formData: LoginFormValues) {
       error: "Invalid email or password. Please try again.",
     }
   } catch (error) {
-    // Handle any errors that occur during authentication
-    // console.log(error)
-    return {
-      error: "An error occurred during login. Please try again.",
+    if (error instanceof Error) {
+      return { error: error.message }
+    } else if (typeof error === "string") {
+      return { error: error }
+    } else {
+      return {
+        error: "An error occurred during login. Please try again.",
+      }
     }
   }
 }

@@ -1,6 +1,7 @@
 // export const authConfig = {};
 //  import GitHub from "next-auth/providers/github"
-import type { NextAuthConfig } from "next-auth";
+// import type { NextAuthConfig } from "next-auth";
+import { NextAuthConfig } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { cookies } from "next/headers";
 
@@ -85,7 +86,7 @@ export default {
         },
         expires: session.expires
       }
-      return sessionNew as any
+      return sessionNew
     },
     async redirect({ url, baseUrl }) {
       if (url.startsWith("/")) return `${baseUrl}${url}`

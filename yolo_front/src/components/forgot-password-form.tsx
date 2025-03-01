@@ -51,7 +51,13 @@ export default function ForgotPassword() {
       }
       router.push(data.resetUrl)
     } catch (error) {
-      setServerError("An unexpected error occurred. Please try again.")
+      if (error instanceof Error) {
+        setServerError(error.message);
+      } else if (typeof error === "string") {
+        setServerError(error);
+      } else {
+        setServerError("An unexpected error occurred. Please try again.");
+      }
     }
     setIsSubmitting(false)
   }
@@ -65,7 +71,7 @@ export default function ForgotPassword() {
               Forgot your password?
             </h2>
             <p className="mt-2 text-center text-sm text-gray-600 ">
-              Enter the email address associated with your account and we'll send you a link to reset your password.
+              Enter the email address associated with your account and we&apos;ll send you a link to reset your password.
             </p>
           </div>
           <Form {...form}>

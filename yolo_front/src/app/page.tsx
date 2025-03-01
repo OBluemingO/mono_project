@@ -66,7 +66,7 @@ export default function HomePage() {
         <div className="max-w-5xl mx-auto space-y-8">
           <div className="space-y-2">
             <h2 className="text-2xl md:text-3xl font-bold tracking-tighter">Selected Work</h2>
-            <p className="text-muted-foreground">A collection of projects I've worked on.</p>
+            <p className="text-muted-foreground">A collection of projects I&apos;ve worked on.</p>
           </div>
           <div className="grid gap-8 md:grid-cols-2">
             {[1, 2].map((i) => (
@@ -103,9 +103,9 @@ export default function HomePage() {
         <div className="max-w-5xl mx-auto">
           <div className="grid gap-8 md:grid-cols-2 items-center">
             <div className="space-y-4">
-              <h2 className="text-2xl md:text-3xl font-bold tracking-tighter">Let's work together</h2>
+              <h2 className="text-2xl md:text-3xl font-bold tracking-tighter">Let&apos;s work together</h2>
               <p className="text-muted-foreground">
-                I'm always interested in hearing about new projects and opportunities.
+                I&apos;m always interested in hearing about new projects and opportunities.
               </p>
               <div className="space-y-2">
                 <Button className="w-full sm:w-auto" asChild>

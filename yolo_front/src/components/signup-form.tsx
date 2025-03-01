@@ -65,11 +65,15 @@ export default function SignupForm() {
       }
 
       const error = await response.json()
-      console.log(error)
       throw error.error
     } catch (error) {
-      console.log(error)
-      setServerError(error as any)
+      if (error instanceof Error) {
+        setServerError(error.message);
+      } else if (typeof error === "string") {
+        setServerError(error);
+      } else {
+        setServerError("An unexpected error occurred. Please try again.");
+      }
     }
     setIsLoading(false)
   }

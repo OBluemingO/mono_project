@@ -3,7 +3,7 @@
 import type React from "react"
 
 import { Bell, CreditCard, LogOut, Settings, User } from "lucide-react"
-import { redirect, useRouter } from "next/navigation"
+import { redirect } from "next/navigation"
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
@@ -19,18 +19,14 @@ import { signOut, useSession } from "next-auth/react"
 import { useEffect, useState } from "react"
 
 export default function DashboardPage() {
-  const router = useRouter()
   const { data, status, update } = useSession()
-  // const data = dataMain as Session
-  // data.
-  // console.log(session)
   const [user, setUser] = useState<Session['user']>()
   useEffect(() => {
     if (status != 'authenticated') return
 
-    setUser(data.user)
+    setUser((data as Session).user)
 
-  }, [status])
+  }, [status, data?.user])
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target
@@ -41,15 +37,15 @@ export default function DashboardPage() {
   }
 
   // const handleNotificationChange = (key: keyof typeof data.user.notifications) => {
-  const handleNotificationChange = () => {
-    // setUser((prev) => ({
-    //   ...prev,
-    //   notifications: {
-    //     ...prev.notifications,
-    //     [key]: !prev.notifications[key],
-    //   },
-    // }))
-  }
+  // const handleNotificationChange = () => {
+  // setUser((prev) => ({
+  //   ...prev,
+  //   notifications: {
+  //     ...prev.notifications,
+  //     [key]: !prev.notifications[key],
+  //   },
+  // }))
+  // }
 
   const handleSave = () => {
     // In a real app, you would save the user data to a database here
@@ -123,7 +119,7 @@ export default function DashboardPage() {
                     <Avatar className="h-16 w-16">
                       <AvatarImage src="/placeholder.svg?height=64&width=64" alt={user?.name} />
                       <AvatarFallback className="text-lg">
-                        {data?.user?.name
+                        {(data as Session)?.user?.name
                           .split(" ")
                           .map((n) => n[0])
                           .join("")}

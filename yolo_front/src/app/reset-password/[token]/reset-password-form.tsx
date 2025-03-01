@@ -63,7 +63,13 @@ export function ResetPasswordForm({ token }: { token: string }) {
         setError(result.error || "Something went wrong. Please try again.")
       }
     } catch (error) {
-      setError("An unexpected error occurred. Please try again.")
+      if (error instanceof Error) {
+        setError(error.message);
+      } else if (typeof error === "string") {
+        setError(error);
+      } else {
+        setError("An unexpected error occurred. Please try again.");
+      }
     }
   }
 
